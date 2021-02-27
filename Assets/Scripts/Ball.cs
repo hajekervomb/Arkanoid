@@ -23,7 +23,7 @@ public class Ball : MonoBehaviour
         //the ball collides with something
 
         //Hit the racket?
-        if(col.gameObject.tag == "Player")
+        if(col.gameObject.CompareTag("Player"))
         {
             //calculate hit factor
             float x = HitFactor(transform.position, col.transform.position, col.collider.bounds.size.x);
@@ -40,13 +40,21 @@ public class Ball : MonoBehaviour
             Debug.Log("Ball velocity: " + ballVelocity.velocity);            
         }
 
-        if (col.gameObject.tag == "Player")
+        if (col.gameObject.CompareTag("Player"))
         {
             FindObjectOfType<AudioManager>().Play("HitPlayer");
         }
         else
         {
             FindObjectOfType<AudioManager>().Play("HitOther");
+        }
+
+        if (col.gameObject.CompareTag("Enemy"))
+        {
+            Debug.LogError(col.gameObject.name);
+            IEnemy enemy = col.gameObject.GetComponent(typeof(IEnemy)) as IEnemy;
+            
+            enemy.TakeDamage(100); // если надо, добавить мячу переменную урона
         }
                 
     }
