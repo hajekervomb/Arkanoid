@@ -24,4 +24,10 @@ public class GameManager : MonoBehaviour
     #endregion
 
     public bool isGameStarted { get; set; }
+
+    private void Start()
+    {
+        // this allow to set user's screen resolution
+        // Screen.SetResolution()
+    }
 }

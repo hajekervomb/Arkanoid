@@ -29,7 +29,7 @@ public class Ball : MonoBehaviour
             float x = HitFactor(transform.position, col.transform.position, col.collider.bounds.size.x);
 
             //Calcullate direction, set Length to 1
-            Vector2 dir = new Vector2(x, 1).normalized;
+            Vector2 dir = new Vector2(x, 1).normalized; 
             
             //Set velocity with dir * speed
             ballVelocity.velocity = dir * speed;

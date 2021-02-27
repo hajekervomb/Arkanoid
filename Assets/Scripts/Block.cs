@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using static UnityEngine.ParticleSystem;
@@ -11,14 +12,18 @@ public class Block : MonoBehaviour
     private BlocksManager blocksManager;
 
     [SerializeField] private ParticleSystem destroyEffect;
-    
-    
+
+
+    private void Awake()
+    {
+        sr = GetComponent<SpriteRenderer>();
+    }
+
     private void Start()
     {
-        blocksManager = BlocksManager.Instance;
-        sr = GetComponent<SpriteRenderer>();
+        blocksManager = BlocksManager.Instance;       
 
-        ChangeSprite(gameObject);
+        //ChangeSprite();
     }
 
     
@@ -35,40 +40,16 @@ public class Block : MonoBehaviour
         else
         {
             // change sprite
-            // sr.sprite = blocksManager.sprites[blockHealth - 1];
-            // why collissionInfo.collider.tag didn't work and gameObject.tag works fine for switch statement?
-            ChangeSprite(gameObject);
+                     
+            ChangeSprite();
                         
         }
 
     }
 
-    private void ChangeSprite(GameObject other)
+    private void ChangeSprite()
     {
-        switch (other.gameObject.tag)
-        {
-            case "Red Block":
-                sr.sprite = blocksManager.redSprites[blockHealth - 1];
-                break;
-
-            case "Blue Block":
-                sr.sprite = blocksManager.blueSprites[blockHealth - 1];
-                break;
-
-            case "Yellow Block":
-                sr.sprite = blocksManager.yellowSprites[blockHealth - 1];
-                break;
-
-            case "Green Block":
-                sr.sprite = blocksManager.greenSprites[blockHealth - 1];
-                break;
-
-            case "Pink Block":
-                sr.sprite = blocksManager.pinkSprites[blockHealth - 1];
-                Debug.Log("test");
-                break;
-
-        }
+        sr.sprite = blocksManager.sprites[blockHealth - 1];
     }
 
     private void SpawnEffect()
@@ -80,5 +61,14 @@ public class Block : MonoBehaviour
         MainModule mm = destroyEffectClone.GetComponent<ParticleSystem>().main;
         mm.startColor = sr.color;
         Destroy(destroyEffectClone, destroyEffect.main.startLifetime.constant);
+    }
+
+    internal void Init(Transform containerTransform, Sprite sprite, Color color, int hitPoints)
+    {
+        // TODO: implement this
+        transform.SetParent(containerTransform);
+        sr.sprite = sprite;
+        sr.color = color;
+        blockHealth = hitPoints;
     }
 }
