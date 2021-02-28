@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -30,5 +31,12 @@ public class BlocksManager : MonoBehaviour
     public Sprite[] greenSprites;
     public Sprite[] yellowSprites;
     public Sprite[] pinkSprites;
+
+    public event Action BlockDestroyed;
+
+    public void OnBlockDestroyed()
+    {
+        BlockDestroyed?.Invoke();
+    }
 
 }

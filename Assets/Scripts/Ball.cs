@@ -51,10 +51,8 @@ public class Ball : MonoBehaviour
 
         if (col.gameObject.CompareTag("Enemy"))
         {
-            Debug.LogError(col.gameObject.name);
             IEnemy enemy = col.gameObject.GetComponent(typeof(IEnemy)) as IEnemy;
-            
-            enemy.TakeDamage(100); // если надо, добавить мячу переменную урона
+            enemy?.TakeDamage(100); // если надо, добавить мячу переменную урона
         }
                 
     }

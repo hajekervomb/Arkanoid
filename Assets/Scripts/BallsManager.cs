@@ -24,6 +24,7 @@ public class BallsManager : MonoBehaviour
     #endregion
 
     [SerializeField] private Transform racket;
+    [SerializeField] private EnemySpawner enemySpawner;
 
     [SerializeField] private Ball ballPrefab;
     private Ball initialBall;
@@ -52,6 +53,11 @@ public class BallsManager : MonoBehaviour
         {
             GameManager.Instance.isGameStarted = true;
             rb.velocity = Vector2.up * speed;
+        }
+        
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+           InitBall();
         }
     }
 

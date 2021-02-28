@@ -30,6 +30,7 @@ public class Block : MonoBehaviour
         if (blockHealth <= 0)
         {
             Destroy(gameObject);
+            blocksManager.OnBlockDestroyed();
             SpawnEffect();
         }
         else
