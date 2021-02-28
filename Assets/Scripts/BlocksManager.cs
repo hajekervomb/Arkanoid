@@ -29,10 +29,10 @@ public class BlocksManager : MonoBehaviour
     private int maxRows = 6;
     private int maxCols = 12;
     private GameObject bricksContainer;
-    private float initialBrickSpawnPositionX = -95.5f;
+    private float initialBrickSpawnPositionX = -93f;
     private float initialBrickSpawnPositionY = 95.5f;
-    public float shiftXAmount = 16.5f;
-    public float shiftYamount = 8.5f;
+    public float shiftXAmount = 17f;
+    public float shiftYamount = 9f;
     
     public Block brickPrefab;
 
