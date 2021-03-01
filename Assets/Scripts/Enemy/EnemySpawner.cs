@@ -7,8 +7,10 @@ using Random = UnityEngine.Random;
 
 public class EnemySpawner : MonoBehaviour
 {
-   [SerializeField] private GameObject enemyPrefab;
+   [SerializeField] private EnemyFactory enemyFactory;
    [SerializeField] public Transform defaultTarget;
+
+   private Array enumValues;
 
    private Vector3 screenBounds;
    private const float XBordersOfUnplayableArea = 120;
@@ -19,13 +21,17 @@ public class EnemySpawner : MonoBehaviour
 
    private void Start()
    {
+      enumValues = Enum.GetValues(typeof(EnemyType));
       screenBounds = MiscTools.GetScreenBounds();
       Invoke(nameof(SpawnEnemyInRandomLocation), timeBeforeFirstSpawn);
    }
 
-   public void SpawnEnemy(Vector3 spawnLocation)
+   public void SpawnEnemy(EnemyType type, Vector3 spawnLocation)
    {
-      GameObject enemyGameObject = Instantiate(enemyPrefab, spawnLocation, quaternion.identity, this.gameObject.transform);
+      GameObject enemyGameObject = enemyFactory.GetEnemyInstance(type);
+      enemyGameObject.transform.position = spawnLocation;
+      enemyGameObject.transform.parent = this.gameObject.transform;
+         
       IEnemy enemy = enemyGameObject.GetComponent<IEnemy>();
       enemy.Init();
    }
@@ -33,7 +39,7 @@ public class EnemySpawner : MonoBehaviour
    public void SpawnEnemyInRandomLocation()
    {
       Vector3 randomLocation = GetRandomSpawnLocation();
-      SpawnEnemy(randomLocation);
+      SpawnEnemy(GetRandomEnemyType(), randomLocation);
    }
 
    private Vector3 GetRandomSpawnLocation()
@@ -42,5 +48,11 @@ public class EnemySpawner : MonoBehaviour
       float randomYCoord = Random.Range(-screenBounds.y + YBordersOfUnplayableArea, screenBounds.y - YBordersOfUnplayableArea);
       
       return new Vector3(randomXCoord,randomYCoord, 0);
+   }
+
+   private EnemyType GetRandomEnemyType()
+   {
+      EnemyType randomEnemy = (EnemyType)enumValues.GetValue(Random.Range(0, enumValues.Length));
+      return randomEnemy;
    }
 }

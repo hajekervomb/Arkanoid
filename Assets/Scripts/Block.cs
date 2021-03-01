@@ -74,6 +74,9 @@ public class Block : MonoBehaviour
 
     private void SpawnEffect()
     {
+        if(destroyEffect == null)
+            return;
+
         Vector3 blockPos = gameObject.transform.position;
         Vector3 spawnPos = new Vector3(blockPos.x, blockPos.y, blockPos.z - 0.2f);
         GameObject destroyEffectClone = Instantiate(destroyEffect.gameObject, spawnPos, Quaternion.identity);

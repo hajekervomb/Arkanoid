@@ -4,18 +4,29 @@ using System.Collections.Generic;
 using Pathfinding;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour, IEnemy
+public enum EnemyType
+{
+   Default = 0,
+   ToughOne = 1,
+}
+
+public abstract class Enemy : MonoBehaviour, IEnemy
 {
    private EnemySpawner enemySpawner;
    private AIDestinationSetter aiDestinationSetter;
-   public int Health { get; set; } = 100;
+   public int Health { get; set; } 
 
    private void OnEnable()
    {
       BlocksManager.Instance.BlockDestroyed += RecalculatePath;
    }
 
-   public void Init()
+   private void Start()
+   {
+      Physics2D.IgnoreLayerCollision((int)Layer.Player, (int)Layer.Enemy);
+   }
+
+   public virtual void Init()
    {
       enemySpawner = GetComponentInParent<EnemySpawner>();
       
