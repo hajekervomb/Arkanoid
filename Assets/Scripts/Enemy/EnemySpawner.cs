@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.Mathematics;
+using Pathfinding;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -10,19 +8,16 @@ public class EnemySpawner : MonoBehaviour
    [SerializeField] private EnemyFactory enemyFactory;
    [SerializeField] public Transform defaultTarget;
 
+   private GridGraph activeGrid;
    private Array enumValues;
-
-   private Vector3 screenBounds;
-   private const float XBordersOfUnplayableArea = 120;
-   private const float YBordersOfUnplayableArea = 10;
 
    private Vector3 defaultSpawnPoint = new Vector3(0,0,0);
    private float timeBeforeFirstSpawn = 5;
 
    private void Start()
    {
+      activeGrid = AstarPath.active.data.gridGraph;
       enumValues = Enum.GetValues(typeof(EnemyType));
-      screenBounds = MiscTools.GetScreenBounds();
       Invoke(nameof(SpawnEnemyInRandomLocation), timeBeforeFirstSpawn);
    }
 
@@ -44,10 +39,8 @@ public class EnemySpawner : MonoBehaviour
 
    private Vector3 GetRandomSpawnLocation()
    {
-      float randomXCoord = Random.Range(-screenBounds.x + XBordersOfUnplayableArea, screenBounds.x - XBordersOfUnplayableArea);
-      float randomYCoord = Random.Range(-screenBounds.y + YBordersOfUnplayableArea, screenBounds.y - YBordersOfUnplayableArea);
-      
-      return new Vector3(randomXCoord,randomYCoord, 0);
+      var randomNode = activeGrid.nodes[Random.Range(0, activeGrid.nodes.Length)];
+      return (Vector3) randomNode.position;
    }
 
    private EnemyType GetRandomEnemyType()
