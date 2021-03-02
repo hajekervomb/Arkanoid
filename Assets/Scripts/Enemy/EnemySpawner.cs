@@ -6,11 +6,9 @@ using Random = UnityEngine.Random;
 public class EnemySpawner : MonoBehaviour
 {
    [SerializeField] private EnemyFactory enemyFactory;
-   [SerializeField] public Transform defaultTarget;
 
    private GridGraph activeGrid;
    private Array enumValues;
-
    private Vector3 defaultSpawnPoint = new Vector3(0,0,0);
    private float timeBeforeFirstSpawn = 5;
 
@@ -37,6 +35,7 @@ public class EnemySpawner : MonoBehaviour
       SpawnEnemy(GetRandomEnemyType(), randomLocation);
    }
 
+   // TODO - Все еще спавнит внутри препятствий. Разобраться дело в методе или в настройках сетки
    private Vector3 GetRandomSpawnLocation()
    {
       var randomNode = activeGrid.nodes[Random.Range(0, activeGrid.nodes.Length)];

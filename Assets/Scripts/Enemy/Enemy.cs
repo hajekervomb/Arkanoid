@@ -13,8 +13,7 @@ public enum EnemyType
 public abstract class Enemy : MonoBehaviour, IEnemy
 {
    private EnemySpawner enemySpawner;
-   private AIDestinationSetter aiDestinationSetter;
-   public int Health { get; set; } 
+   public int Health { get; set; }
 
    private void OnEnable()
    {
@@ -26,12 +25,18 @@ public abstract class Enemy : MonoBehaviour, IEnemy
       Physics2D.IgnoreLayerCollision((int)Layer.Player, (int)Layer.Enemy);
    }
 
+   private void Update()
+   {
+      if (Input.GetKeyDown(KeyCode.K))
+      {
+         Die();
+         enemySpawner.SpawnEnemyInRandomLocation();
+      }
+   }
+
    public virtual void Init()
    {
       enemySpawner = GetComponentInParent<EnemySpawner>();
-      
-      aiDestinationSetter = GetComponent<AIDestinationSetter>();
-      aiDestinationSetter.target = enemySpawner.defaultTarget;
    }
 
    public void TakeDamage(int damage)
