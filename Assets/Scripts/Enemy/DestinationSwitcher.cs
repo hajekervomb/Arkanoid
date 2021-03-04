@@ -7,7 +7,7 @@ using Random = UnityEngine.Random;
 
 public enum EnemyState
 {
-    MovingToMainTarget = 0,
+    MovingToDestinationPoint = 0,
     Wandering = 1,
 }
 
@@ -44,7 +44,7 @@ public class DestinationSwitcher : MonoBehaviour
     {
         switch (state)
         {
-            case EnemyState.MovingToMainTarget:
+            case EnemyState.MovingToDestinationPoint:
                 aiPath.destination = destinationPoint;
                 break;
 
@@ -79,7 +79,7 @@ public class DestinationSwitcher : MonoBehaviour
         if (IsPathPossible(EnemyNode, DestinationPointNode))
         {
             Debug.Log("Path is possible");
-            SetEnemyState(EnemyState.MovingToMainTarget);
+            SetEnemyState(EnemyState.MovingToDestinationPoint);
         }
         else
         {
@@ -88,9 +88,20 @@ public class DestinationSwitcher : MonoBehaviour
         }
     }
 
+    // TODO - почти полная копия метода из EnemySpawner - решить где оставить один, и как вызывать
     private GridNode GetRandomNode()
     {
-        var randomNode = activeGrid.nodes[Random.Range(0, activeGrid.nodes.Length)];
+        GridNode randomNode;
+      
+        while (true)
+        {
+            randomNode = activeGrid.nodes[Random.Range(0, activeGrid.nodes.Length)];
+
+            if (randomNode.Walkable)
+                break;
+        }
+
+        Debug.LogError($"Is nod traversable: {randomNode.Walkable}");
         return randomNode;
     }
 
@@ -106,8 +117,8 @@ public class DestinationSwitcher : MonoBehaviour
     {
         Vector3 screenBounds = MiscTools.GetScreenBounds();
 
-        float xCoord = Random.Range(-screenBounds.x, screenBounds.x);
-        float yCoord = -screenBounds.y - 10;
+        float xCoord = Random.Range(-screenBounds.x / 2, screenBounds.x / 2);
+        float yCoord = -screenBounds.y;
 
         return new Vector3(xCoord, yCoord, 0);
     }

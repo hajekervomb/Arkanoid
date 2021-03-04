@@ -35,10 +35,19 @@ public class EnemySpawner : MonoBehaviour
       SpawnEnemy(GetRandomEnemyType(), randomLocation);
    }
 
-   // TODO - Все еще спавнит внутри препятствий. Разобраться дело в методе или в настройках сетки
    private Vector3 GetRandomSpawnLocation()
    {
-      var randomNode = activeGrid.nodes[Random.Range(0, activeGrid.nodes.Length)];
+      GridNode randomNode;
+      
+      while (true)
+      {
+         randomNode = activeGrid.nodes[Random.Range(0, activeGrid.nodes.Length)];
+
+         if (randomNode.Walkable)
+            break;
+      }
+
+      Debug.LogError($"Is nod traversable: {randomNode.Walkable}");
       return (Vector3) randomNode.position;
    }
 
