@@ -9,6 +9,7 @@ public class Block : MonoBehaviour
     [SerializeField] private int blockHealth = 1;
 
     private SpriteRenderer sr;
+    private GameManager gm;
     private BlocksManager blocksManager;
 
     [SerializeField] private ParticleSystem destroyEffect;
@@ -17,12 +18,13 @@ public class Block : MonoBehaviour
     private void Awake()
     {
         sr = GetComponent<SpriteRenderer>();
+        
     }
 
     private void Start()
     {
-        blocksManager = BlocksManager.Instance;       
-
+        blocksManager = BlocksManager.Instance;
+        gm = GameManager.Instance;
         //ChangeSprite();
     }
 
@@ -34,8 +36,10 @@ public class Block : MonoBehaviour
 
         if (blockHealth <= 0)
         {
+            BlocksManager.Instance.RemainingBricks.Remove(this);
             Destroy(gameObject);
             SpawnEffect();
+            GameManager.Score += 10;
         }
         else
         {
@@ -70,5 +74,10 @@ public class Block : MonoBehaviour
         sr.sprite = sprite;
         sr.color = color;
         blockHealth = hitPoints;
+    }
+
+    private void OnDestroy()
+    {
+        
     }
 }

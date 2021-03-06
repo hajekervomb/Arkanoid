@@ -1,12 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class Ball : MonoBehaviour
 {
     //movement speed of the ball
     public float speed = 100f;
     Rigidbody2D ballVelocity;
+
+    public delegate void BallDeath();
+    public static BallDeath ballDeath = delegate { };
 
     
     // Start is called before the first frame update
@@ -15,8 +19,7 @@ public class Ball : MonoBehaviour
         ballVelocity = GetComponent<Rigidbody2D>();
         //ballVelocity.velocity = Vector2.up * speed;
     }
-        
-
+               
     private void OnCollisionEnter2D(Collision2D col)
     {
         //this function is called whenever
@@ -59,5 +62,12 @@ public class Ball : MonoBehaviour
         //==================  <- racket
         //
         return (ballPos.x - racketPos.x) / racketWidth;
+    }
+
+    public void DestroyBall()
+    {
+        GameManager.Instance.KillPlayer();
+        ballDeath();
+        Destroy(gameObject);        
     }
 }
