@@ -46,6 +46,7 @@ public class BlocksManager : MonoBehaviour
 
     public int CurrentLevel;
 
+<<<<<<< Updated upstream
     public event Action BlockDestroyed;
 
     private void OnBlockDestroyed()
@@ -53,9 +54,16 @@ public class BlocksManager : MonoBehaviour
         BlockDestroyed?.Invoke();
     }
     
+=======
+    private GameManager gm;
+    private BallsManager bm;    
+>>>>>>> Stashed changes
 
     private void Start()
     {
+        gm = GameManager.Instance;     // get references
+        bm = BallsManager.Instance;
+
         this.bricksContainer = new GameObject("BricksContainer");
         
         LevelsData = LoadLevelsData();
@@ -67,7 +75,22 @@ public class BlocksManager : MonoBehaviour
         CurrentLevel = level;
         ClearRemainingBricks(); // optional - reset all brick on current level
         GenerateBricks();
+    }
 
+    public void LoadNextLevel()
+    {       
+
+        CurrentLevel++; // increment the level value
+
+        if (CurrentLevel >= LevelsData.Count) //we completed all levels
+        {
+            //show victory screen
+            Debug.Log("FLAWLESS VICTORY!");
+        }
+        else
+        {
+            LoadLevel(CurrentLevel);
+        }
     }
 
     private void ClearRemainingBricks()
@@ -80,7 +103,7 @@ public class BlocksManager : MonoBehaviour
 
     private void GenerateBricks()
     {
-        RemainingBricks = new List<Block>();
+        RemainingBricks = new List<Block>();    // initizialization of collection
         int[,] currentLevelData = LevelsData[CurrentLevel];
         float currentSpawnX = initialBrickSpawnPositionX;
         float currentSpawnY = initialBrickSpawnPositionY;

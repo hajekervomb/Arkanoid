@@ -42,6 +42,7 @@ public class GameManager : MonoBehaviour
     }
 
     private BallsManager bm;
+    private BlocksManager bricksManager;
 
     [SerializeField] private Transform player;
 
@@ -50,18 +51,20 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         bm = BallsManager.Instance;
+        bricksManager = BlocksManager.Instance;
         // this allow to set user's screen resolution
         // Screen.SetResolution()
         _remainingLives = startLives;
+
         Ball.ballDeath += ResetPosition;
+        Block.onBrickDestroy += EndLevelContainer;
     }
 
-    public void ResetPosition() // for ball and racket
+    public void ResetPosition() // for racket
     {
         // reset reacket position when all balls destroyed
         isGameStarted = false;
-        player.position = new Vector3(0, -95f, 0);
-        bm.InitBall();
+        player.position = new Vector3(0, -95f, 0);        
 
     }
 
@@ -75,12 +78,40 @@ public class GameManager : MonoBehaviour
             if (_remainingLives < 1)
             {
                 // show game over screen
-                Ball.ballDeath -= ResetPosition;
+                //Ball.ballDeath -= ResetPosition;
                 EndGame();
             }
-
+            else
+            {
+                bm.InitBall();
+                BlocksManager.Instance.LoadLevel(BlocksManager.Instance.CurrentLevel);
+            }
         }
 
+    }
+
+    public void EndLevelContainer(Block obj)    // it's just a container for coroutine "End Level"
+    {
+        StartCoroutine(EndLevel());
+    }
+
+    public IEnumerator EndLevel()   // check for remaining bricks when a brick destroyed
+    {
+        if (bricksManager.RemainingBricks.Count <= 0)
+        {
+            // wait for sec
+            
+            isGameStarted = false;
+            ResetPosition();
+            Debug.Log("RESET PLAYER POS!");
+            
+            bm.InitBall();
+
+            yield return new WaitForSeconds(5f);
+
+            bricksManager.LoadNextLevel();
+        }
+        
     }
 
     public void EndGame()
@@ -92,5 +123,6 @@ public class GameManager : MonoBehaviour
     private void OnDisable()
     {
         Ball.ballDeath -= ResetPosition;
+        Block.onBrickDestroy -= EndLevelContainer;
     }
 }

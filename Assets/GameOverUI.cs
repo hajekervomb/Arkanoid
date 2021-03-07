@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameOverUI : MonoBehaviour
 {
@@ -11,6 +12,8 @@ public class GameOverUI : MonoBehaviour
     {
         //restart level
         Debug.Log("RESTART LEVEL!");
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        GameManager.Score = 0;
     }
 
     public void QuitGame()

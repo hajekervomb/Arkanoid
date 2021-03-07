@@ -52,14 +52,21 @@ public class BallsManager : MonoBehaviour
         if (GameManager.Instance.isGameStarted == false)
         {
             Vector3 ballPosition = new Vector3(racket.position.x, racket.position.y + 8f, 0);
-            initialBall.transform.position = ballPosition;
+            if (initialBall != null)
+            {
+                initialBall.transform.position = ballPosition;
+            }
+            
         }
         
 
         if (Input.GetKeyDown(KeyCode.E) && GameManager.Instance.isGameStarted == false)
-        {            
-            GameManager.Instance.isGameStarted = true;
-            rb.velocity = Vector2.up * speed;                        
+        {   if (initialBall !=  null)
+            {
+                GameManager.Instance.isGameStarted = true;
+                rb.velocity = Vector2.up * speed;
+            }
+                                   
         }               
                        
     }

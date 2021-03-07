@@ -14,6 +14,8 @@ public class Block : MonoBehaviour
 
     [SerializeField] private ParticleSystem destroyEffect;
 
+    public static Action<Block> onBrickDestroy = delegate { };
+
 
     private void Awake()
     {
@@ -36,7 +38,8 @@ public class Block : MonoBehaviour
 
         if (blockHealth <= 0)
         {
-            BlocksManager.Instance.RemainingBricks.Remove(this);
+            blocksManager.RemainingBricks.Remove(this); //important to remove destroyed bricks
+            onBrickDestroy(this);
             Destroy(gameObject);
             SpawnEffect();
             GameManager.Score += 10;
@@ -75,9 +78,5 @@ public class Block : MonoBehaviour
         sr.color = color;
         blockHealth = hitPoints;
     }
-
-    private void OnDestroy()
-    {
-        
-    }
+       
 }
