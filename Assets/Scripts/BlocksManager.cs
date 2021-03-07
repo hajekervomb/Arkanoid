@@ -32,11 +32,11 @@ public class BlocksManager : MonoBehaviour
     public Sprite[] yellowSprites;
     public Sprite[] pinkSprites;
 
+    // TODO - Добавить в мастер ветку!
     public event Action BlockDestroyed;
 
     public void OnBlockDestroyed()
     {
         BlockDestroyed?.Invoke();
     }
-
 }

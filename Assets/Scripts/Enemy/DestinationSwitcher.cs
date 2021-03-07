@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using Pathfinding;
+﻿using Pathfinding;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -13,7 +10,6 @@ public enum EnemyState
 
 public class DestinationSwitcher : MonoBehaviour
 {
-    private GridGraph activeGrid;
     private MyAIPath aiPath;
     private Vector3 destinationPoint;
 
@@ -33,8 +29,6 @@ public class DestinationSwitcher : MonoBehaviour
 
     private void Start()
     {
-        activeGrid = AstarPath.active.data.gridGraph;
-
         destinationPoint = GetRandomDestinationPoint();
         DestinationPointNode = GetGraphNodeByPosition(destinationPoint);
         CheckPath();
@@ -49,12 +43,12 @@ public class DestinationSwitcher : MonoBehaviour
                 break;
 
             case EnemyState.Wandering:
-                var randomDestination = GetRandomNode().position;
+                var randomDestination = MyPathUtilities.GetValidRandomNode().position;
 
                 // Генерируем рандомную точку назначения до тех пор, пока не находим валидную (для текущего положения врага)
                 while (!IsPathPossible(EnemyNode, GetGraphNodeByPosition((Vector3) randomDestination)))
                 {
-                    randomDestination = GetRandomNode().position;
+                    randomDestination = MyPathUtilities.GetValidRandomNode().position;
                 }
 
                 aiPath.destination = (Vector3) randomDestination;
@@ -86,23 +80,6 @@ public class DestinationSwitcher : MonoBehaviour
             Debug.LogError("Path is blocked");
             SetEnemyState(EnemyState.Wandering);
         }
-    }
-
-    // TODO - почти полная копия метода из EnemySpawner - решить где оставить один, и как вызывать
-    private GridNode GetRandomNode()
-    {
-        GridNode randomNode;
-      
-        while (true)
-        {
-            randomNode = activeGrid.nodes[Random.Range(0, activeGrid.nodes.Length)];
-
-            if (randomNode.Walkable)
-                break;
-        }
-
-        Debug.LogError($"Is nod traversable: {randomNode.Walkable}");
-        return randomNode;
     }
 
     // Возвращает нод, ближайший к переданным координатам

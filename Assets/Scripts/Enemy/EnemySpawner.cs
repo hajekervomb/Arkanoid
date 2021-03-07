@@ -1,5 +1,4 @@
 ﻿using System;
-using Pathfinding;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -7,15 +6,12 @@ public class EnemySpawner : MonoBehaviour
 {
    [SerializeField] private EnemyFactory enemyFactory;
 
-   private GridGraph activeGrid;
-   private Array enumValues;
-   private Vector3 defaultSpawnPoint = new Vector3(0,0,0);
+   private Array enemyTypeEnumValues;
    private float timeBeforeFirstSpawn = 5;
 
    private void Start()
    {
-      activeGrid = AstarPath.active.data.gridGraph;
-      enumValues = Enum.GetValues(typeof(EnemyType));
+      enemyTypeEnumValues = Enum.GetValues(typeof(EnemyType));
       Invoke(nameof(SpawnEnemyInRandomLocation), timeBeforeFirstSpawn);
    }
 
@@ -31,29 +27,13 @@ public class EnemySpawner : MonoBehaviour
 
    public void SpawnEnemyInRandomLocation()
    {
-      Vector3 randomLocation = GetRandomSpawnLocation();
+      Vector3 randomLocation = (Vector3)MyPathUtilities.GetValidRandomNode().position;
       SpawnEnemy(GetRandomEnemyType(), randomLocation);
-   }
-
-   private Vector3 GetRandomSpawnLocation()
-   {
-      GridNode randomNode;
-      
-      while (true)
-      {
-         randomNode = activeGrid.nodes[Random.Range(0, activeGrid.nodes.Length)];
-
-         if (randomNode.Walkable)
-            break;
-      }
-
-      Debug.LogError($"Is nod traversable: {randomNode.Walkable}");
-      return (Vector3) randomNode.position;
    }
 
    private EnemyType GetRandomEnemyType()
    {
-      EnemyType randomEnemy = (EnemyType)enumValues.GetValue(Random.Range(0, enumValues.Length));
+      EnemyType randomEnemy = (EnemyType)enemyTypeEnumValues.GetValue(Random.Range(0, enemyTypeEnumValues.Length));
       return randomEnemy;
    }
 }
