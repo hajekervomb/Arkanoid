@@ -51,6 +51,12 @@ public class Ball : MonoBehaviour
         {
             FindObjectOfType<AudioManager>().Play("HitOther");
         }
+        
+        if (col.gameObject.CompareTag("Enemy"))
+        {
+            IEnemy enemy = col.gameObject.GetComponent(typeof(IEnemy)) as IEnemy;
+            enemy?.TakeDamage(100); // если надо, добавить мячу переменную урона
+        }
                 
     }
 

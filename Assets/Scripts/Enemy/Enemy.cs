@@ -16,11 +16,6 @@ public abstract class Enemy : MonoBehaviour, IEnemy
       BlocksManager.Instance.BlockDestroyed += RecalculatePath;
    }
 
-   private void Start()
-   {
-      //Physics2D.IgnoreLayerCollision((int)Layer.Player, (int)Layer.Enemy); // уточнить у ГД =)
-   }
-
    // TODO - убрать. Сейчас нужно только для тестов
    private void Update()
    {

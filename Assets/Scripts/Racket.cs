@@ -34,17 +34,23 @@ public class Racket : MonoBehaviour
         }
     }
 
+    private void OnCollisionEnter2D(Collision2D col)
+    {
+        if (col.gameObject.CompareTag("Enemy"))
+        {
+            Destroy(col.gameObject);
+        }
+    }
+
     // Update is called once per frame
     void FixedUpdate()
     {
         Move();
-        
     }
             
     private void Move()
     {
         rb.velocity = Vector2.right * horizontalMove * speed * Time.fixedDeltaTime * 100;
         //set velocity = movement direction * speed
-        
     }
 }
