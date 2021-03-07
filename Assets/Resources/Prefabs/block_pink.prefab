@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 2751960275558036434}
   - component: {fileID: -912915879247599271}
   - component: {fileID: 471292113268124711}
-  m_Layer: 0
-  m_Name: block_blue 1
+  m_Layer: 9
+  m_Name: block_pink
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

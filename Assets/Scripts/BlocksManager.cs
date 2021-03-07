@@ -46,18 +46,15 @@ public class BlocksManager : MonoBehaviour
 
     public int CurrentLevel;
 
-<<<<<<< Updated upstream
     public event Action BlockDestroyed;
 
     private void OnBlockDestroyed()
     {
         BlockDestroyed?.Invoke();
     }
-    
-=======
+
     private GameManager gm;
-    private BallsManager bm;    
->>>>>>> Stashed changes
+    private BallsManager bm;
 
     private void Start()
     {
