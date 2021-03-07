@@ -12,6 +12,7 @@ TagManager:
   - Yellow Block
   - Green Block
   - Pink Block
+  - Enemy
   layers:
   - Default
   - TransparentFX
@@ -22,7 +23,7 @@ TagManager:
   - 
   - 
   - Ball
-  - 
+  - Obstacle
   - 
   - 
   - 
