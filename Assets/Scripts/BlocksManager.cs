@@ -45,6 +45,13 @@ public class BlocksManager : MonoBehaviour
     public List<int[,]> LevelsData { get; set; }
 
     public int CurrentLevel;
+
+    public event Action BlockDestroyed;
+
+    private void OnBlockDestroyed()
+    {
+        BlockDestroyed?.Invoke();
+    }
     
 
     private void Start()
