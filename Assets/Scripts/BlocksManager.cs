@@ -2,8 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
-
+//TODO: how autogeneration works?
 
 public class BlocksManager : MonoBehaviour
 {
@@ -29,10 +30,10 @@ public class BlocksManager : MonoBehaviour
     private int maxRows = 6;
     private int maxCols = 12;
     private GameObject bricksContainer;
-    private float initialBrickSpawnPositionX = -95.5f;
+    private float initialBrickSpawnPositionX = -93f;
     private float initialBrickSpawnPositionY = 95.5f;
-    public float shiftXAmount = 16.5f;
-    public float shiftYamount = 8.5f;
+    public float shiftXAmount = 17f;
+    public float shiftYamount = 9f;
     
     public Block brickPrefab;
 
@@ -49,13 +50,30 @@ public class BlocksManager : MonoBehaviour
     private void Start()
     {
         this.bricksContainer = new GameObject("BricksContainer");
-        RemainingBricks = new List<Block>();
+        
         LevelsData = LoadLevelsData();
         GenerateBricks();
     }
 
+    public void LoadLevel(int level)
+    {
+        CurrentLevel = level;
+        ClearRemainingBricks(); // optional - reset all brick on current level
+        GenerateBricks();
+
+    }
+
+    private void ClearRemainingBricks()
+    {
+        foreach (var brick in RemainingBricks.ToList())
+        {
+            Destroy(brick.gameObject);
+        }
+    }
+
     private void GenerateBricks()
     {
+        RemainingBricks = new List<Block>();
         int[,] currentLevelData = LevelsData[CurrentLevel];
         float currentSpawnX = initialBrickSpawnPositionX;
         float currentSpawnY = initialBrickSpawnPositionY;
