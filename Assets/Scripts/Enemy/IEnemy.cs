@@ -6,7 +6,8 @@ public interface IEnemy
     event Action EnemyDestroyed;
     
     int Health { get; set; }
-    void Init();
+    int Speed { get; set; }
+    void Init(EnemyType enemyType);
     void TakeDamage(int damage);
     void Die();
     void DestroyEnemy();

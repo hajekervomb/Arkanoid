@@ -8,12 +8,15 @@ public enum EnemyType
    Slow = 2,
 }
 
-public abstract class Enemy : MonoBehaviour, IEnemy
+public class Enemy : MonoBehaviour, IEnemy
 {
-   private EnemySpawner enemySpawner;
+   protected EnemySpawner enemySpawner;
    private MyAIPath myAIPath;
    private DestinationSwitcher destinationSwitcher;
+
+   private SpriteRenderer spriteRenderer;
    public int Health { get; set; }
+   public int Speed { get; set; }
 
    // TODO - объединить ивенты и методы (добавив параметр?)
    public event Action EnemyDied; // врага убили
@@ -36,13 +39,23 @@ public abstract class Enemy : MonoBehaviour, IEnemy
       }
    }
 
-   public virtual void Init()
+   public virtual void Init(EnemyType enemyType)
    {
       enemySpawner = GetComponentInParent<EnemySpawner>();
       myAIPath =  GetComponentInParent<MyAIPath>();
       myAIPath.TargetReachedEvent += CheckMainDestinationPoint;
       destinationSwitcher =  GetComponentInParent<DestinationSwitcher>();
+      spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+
+      EnemyTypeSO enemyTypeSO = enemySpawner.enemyTypesSOs.Find(type => type.name == enemyType.ToString());
+
+      Health = enemyTypeSO.health;
+      Speed = enemyTypeSO.speed;
+
+      spriteRenderer.sprite = enemyTypeSO.sprite;
+      myAIPath.maxSpeed = Speed;
    }
+
 
    // Проверка дошел ли враг именно до своего основного пункта назначения
    private void CheckMainDestinationPoint()

@@ -7,6 +7,7 @@ using Random = UnityEngine.Random;
 public class EnemySpawner : MonoBehaviour
 {
    [SerializeField] private EnemyFactory enemyFactory;
+   [SerializeField] public List<EnemyTypeSO> enemyTypesSOs = new List<EnemyTypeSO>();
 
    [SerializeField] private List<GameObject> spawnPointGameObjects = new List<GameObject>();
    private readonly List<Vector3> spawnPointPositions = new List<Vector3>();
@@ -26,17 +27,17 @@ public class EnemySpawner : MonoBehaviour
       InvokeRepeating(nameof(SpawnEnemyInRandomSpawnPosition), timeBeforeFirstSpawn, enemySpawnDelay);
    }
 
-   public void SpawnEnemy(EnemyType type, Vector3 spawnLocation)
+   public void SpawnEnemy(EnemyType enemyType, Vector3 spawnLocation)
    {
       if (currentEnemyCount >= maxEnemyCount)
          return;
       
-      GameObject enemyGameObject = enemyFactory.GetEnemyInstance(type);
+      GameObject enemyGameObject = enemyFactory.GetEnemyInstance();
       enemyGameObject.transform.position = spawnLocation;
       enemyGameObject.transform.parent = this.gameObject.transform;
-         
-      IEnemy enemy = enemyGameObject.GetComponent<IEnemy>();
-      enemy.Init();
+      IEnemy enemy = enemyGameObject.AddComponent<Enemy>();
+
+      enemy.Init(enemyType);
       
       enemy.EnemyDestroyed += DecreaseEnemyCount;
       enemy.EnemyDied += DecreaseEnemyCount;
