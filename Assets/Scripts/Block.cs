@@ -41,6 +41,7 @@ public class Block : MonoBehaviour
             blocksManager.RemainingBricks.Remove(this); //important to remove destroyed bricks
             onBrickDestroy(this);
             Destroy(gameObject);
+            blocksManager.OnBlockDestroyed();
             SpawnEffect();
             GameManager.Score += 10;
         }

@@ -16,8 +16,6 @@ public static class MyPathUtilities
             if (randomNode.Walkable)
                 break;
         }
-
-        Debug.LogError($"Is nod traversable: {randomNode.Walkable}");
         return randomNode;
     }
 }

@@ -100,6 +100,11 @@ public class DestinationSwitcher : MonoBehaviour
         return new Vector3(xCoord, yCoord, 0);
     }
 
+    public bool IsEnemyReachedMainDestinationPoint()
+    {
+        return destinationPoint == aiPath.destination;
+    }
+
     private void OnDisable()
     {
         BlocksManager.Instance.BlockDestroyed -= CheckPath;

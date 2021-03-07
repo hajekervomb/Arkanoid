@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public enum EnemyType
 {
@@ -9,11 +10,16 @@ public enum EnemyType
 public abstract class Enemy : MonoBehaviour, IEnemy
 {
    private EnemySpawner enemySpawner;
+   private MyAIPath myAIPath;
+   private DestinationSwitcher destinationSwitcher;
    public int Health { get; set; }
 
    private void OnEnable()
    {
       BlocksManager.Instance.BlockDestroyed += RecalculatePath;
+
+      // Т.к. блоки инстанируются в рантайме (а не сразу лежат на сцене), нужно сканить при спавне
+      RecalculatePath();
    }
 
    // TODO - убрать. Сейчас нужно только для тестов
@@ -22,13 +28,24 @@ public abstract class Enemy : MonoBehaviour, IEnemy
       if (Input.GetKeyDown(KeyCode.K))
       {
          Die();
-         enemySpawner.SpawnEnemyInRandomLocation();
       }
    }
 
    public virtual void Init()
    {
       enemySpawner = GetComponentInParent<EnemySpawner>();
+      myAIPath =  GetComponentInParent<MyAIPath>();
+      myAIPath.TargetReachedEvent += CheckMainDestinationPoint;
+      destinationSwitcher =  GetComponentInParent<DestinationSwitcher>();
+   }
+
+   // Проверка дошел ли враг именно до своего основного пункта назначения
+   private void CheckMainDestinationPoint()
+   {
+      if (destinationSwitcher.IsEnemyReachedMainDestinationPoint())
+      {
+         Die();
+      }
    }
 
    public void TakeDamage(int damage)
@@ -38,7 +55,6 @@ public abstract class Enemy : MonoBehaviour, IEnemy
       if (Health <= 0)
       {
          Die();
-         enemySpawner.SpawnEnemyInRandomLocation();
       }
    }
 

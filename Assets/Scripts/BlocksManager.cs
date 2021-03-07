@@ -48,7 +48,7 @@ public class BlocksManager : MonoBehaviour
 
     public event Action BlockDestroyed;
 
-    private void OnBlockDestroyed()
+    public void OnBlockDestroyed()
     {
         BlockDestroyed?.Invoke();
     }
