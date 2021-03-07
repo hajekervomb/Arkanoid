@@ -10,12 +10,16 @@ public class EnemyFactory : MonoBehaviour
 
         switch (type)
         {
-            case EnemyType.Default:
-                prefab.AddComponent<DefaultEnemy>();
+            case EnemyType.Fast:
+                prefab.AddComponent<FastEnemy>();
                 break;
-            case EnemyType.ToughOne:
-                prefab.AddComponent<ToughOneEnemy>();
+            case EnemyType.Average:
+                prefab.AddComponent<AverageEnemy>();
                 break;
+            case EnemyType.Slow:
+                prefab.AddComponent<SlowEnemy>();
+                break;
+
             default:
                 Debug.Log("Wrong enemy type");
                 break;

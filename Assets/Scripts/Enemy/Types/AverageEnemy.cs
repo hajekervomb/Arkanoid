@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ToughOneEnemy : Enemy
+public class AverageEnemy : Enemy
 {
     public override void Init()
     {
         base.Init();
-        Health = 200;
+        Health = 2;
     }
 }

@@ -3,8 +3,9 @@ using UnityEngine;
 
 public enum EnemyType
 {
-   Default = 0,
-   ToughOne = 1,
+   Fast = 0,
+   Average = 1,
+   Slow = 2,
 }
 
 public abstract class Enemy : MonoBehaviour, IEnemy
@@ -13,6 +14,10 @@ public abstract class Enemy : MonoBehaviour, IEnemy
    private MyAIPath myAIPath;
    private DestinationSwitcher destinationSwitcher;
    public int Health { get; set; }
+
+   // TODO - объединить ивенты и методы (добавив параметр?)
+   public event Action EnemyDied; // врага убили
+   public event Action EnemyDestroyed; // враг дошел до точки назначения и уничтожился
 
    private void OnEnable()
    {
@@ -44,7 +49,7 @@ public abstract class Enemy : MonoBehaviour, IEnemy
    {
       if (destinationSwitcher.IsEnemyReachedMainDestinationPoint())
       {
-         Die();
+         DestroyEnemy();
       }
    }
 
@@ -60,7 +65,24 @@ public abstract class Enemy : MonoBehaviour, IEnemy
 
    public void Die()
    {
+      OnEnemyDied();
       Destroy(gameObject);
+   }
+
+   private void OnEnemyDied()
+   {
+      EnemyDied?.Invoke();
+   }
+
+   public void DestroyEnemy()
+   {
+      OnEnemyDestroyed();
+      Destroy(gameObject);
+   }
+
+   private void OnEnemyDestroyed()
+   {
+      EnemyDestroyed?.Invoke();
    }
    
    private void RecalculatePath()

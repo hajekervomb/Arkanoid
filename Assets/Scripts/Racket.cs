@@ -38,7 +38,8 @@ public class Racket : MonoBehaviour
     {
         if (col.gameObject.CompareTag("Enemy"))
         {
-            Destroy(col.gameObject);
+            IEnemy enemy = col.gameObject.GetComponent(typeof(IEnemy)) as IEnemy;
+            enemy?.DestroyEnemy();
         }
     }
 

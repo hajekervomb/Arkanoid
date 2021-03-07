@@ -13,6 +13,9 @@ public class EnemySpawner : MonoBehaviour
 
    [SerializeField] private float timeBeforeFirstSpawn = 5;
    [SerializeField] private float enemySpawnDelay = 30;
+   [SerializeField] private int maxEnemyCount = 3;
+
+   private int currentEnemyCount = 0;
 
    private Array enemyTypeEnumValues;
 
@@ -25,12 +28,27 @@ public class EnemySpawner : MonoBehaviour
 
    public void SpawnEnemy(EnemyType type, Vector3 spawnLocation)
    {
+      if (currentEnemyCount >= maxEnemyCount)
+         return;
+      
       GameObject enemyGameObject = enemyFactory.GetEnemyInstance(type);
       enemyGameObject.transform.position = spawnLocation;
       enemyGameObject.transform.parent = this.gameObject.transform;
          
       IEnemy enemy = enemyGameObject.GetComponent<IEnemy>();
       enemy.Init();
+      
+      enemy.EnemyDestroyed += DecreaseEnemyCount;
+      enemy.EnemyDied += DecreaseEnemyCount;
+      
+      currentEnemyCount++;
+      Debug.LogError($"Current enemy count: {currentEnemyCount}");
+   }
+
+   private void DecreaseEnemyCount()
+   {
+      currentEnemyCount--;
+      Debug.LogError($"Current enemy count: {currentEnemyCount}");
    }
 
    public void SpawnEnemyInRandomSpawnPosition()

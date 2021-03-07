@@ -72,12 +72,10 @@ public class DestinationSwitcher : MonoBehaviour
         // Сначала проверям основной пункт назначения
         if (IsPathPossible(EnemyNode, DestinationPointNode))
         {
-            Debug.Log("Path is possible");
             SetEnemyState(EnemyState.MovingToDestinationPoint);
         }
-        else
-        {
-            Debug.LogError("Path is blocked");
+        else {
+            
             SetEnemyState(EnemyState.Wandering);
         }
     }

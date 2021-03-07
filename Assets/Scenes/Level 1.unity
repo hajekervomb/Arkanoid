@@ -348,7 +348,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0bd99f93e6a73db45b61ee0bcf02d6b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startLives: 2
+  startLives: 100
   maxLives: 0
   player: {fileID: 788454649}
   gameOverUI: {fileID: 574822541}
@@ -1316,6 +1316,10 @@ PrefabInstance:
       propertyPath: spawnPointGameObjects.Array.data[1]
       value: 
       objectReference: {fileID: 93209079}
+    - target: {fileID: 529835036108215255, guid: 56873bbaa48da6d43be65cb45fd8ee04, type: 3}
+      propertyPath: enemySpawnDelay
+      value: 5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 56873bbaa48da6d43be65cb45fd8ee04, type: 3}
 --- !u!1 &635638640

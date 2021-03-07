@@ -7,7 +7,8 @@ public class Ball : MonoBehaviour
 {
     //movement speed of the ball
     public float speed = 100f;
-    Rigidbody2D ballVelocity;
+    private Rigidbody2D ballVelocity;
+    private const int BallDamage = 1;
 
     public delegate void BallDeath();
     public static BallDeath ballDeath = delegate { };
@@ -55,9 +56,8 @@ public class Ball : MonoBehaviour
         if (col.gameObject.CompareTag("Enemy"))
         {
             IEnemy enemy = col.gameObject.GetComponent(typeof(IEnemy)) as IEnemy;
-            enemy?.TakeDamage(100); // если надо, добавить мячу переменную урона
+            enemy?.TakeDamage(BallDamage); 
         }
-                
     }
 
     private float HitFactor (Vector2 ballPos, Vector2 racketPos, float racketWidth)

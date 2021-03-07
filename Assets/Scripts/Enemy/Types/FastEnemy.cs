@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DefaultEnemy : Enemy
+public class FastEnemy : Enemy
 {
    public override void Init()
    {
       base.Init();
-      Health = 100;
+      Health = 1;
    }
 }
