@@ -39,14 +39,19 @@ public class EnemySpawner : MonoBehaviour
 
       enemy.Init(enemyType);
       
-      enemy.EnemyDestroyed += DecreaseEnemyCount;
-      enemy.EnemyDied += DecreaseEnemyCount;
+      enemy.EnemyHitTheRacket += DecreaseEnemyCount;
+      enemy.EnemyHitTheRacket += GameManager.Instance.ChangeScore;
       
+      enemy.EnemyKilled += DecreaseEnemyCount;
+      enemy.EnemyKilled += GameManager.Instance.ChangeScore;
+
+      enemy.EnemyEscaped += DecreaseEnemyCount;
+
       currentEnemyCount++;
       Debug.LogError($"Current enemy count: {currentEnemyCount}");
    }
 
-   private void DecreaseEnemyCount()
+   private void DecreaseEnemyCount(object sender, MyEventArgs args)
    {
       currentEnemyCount--;
       Debug.LogError($"Current enemy count: {currentEnemyCount}");

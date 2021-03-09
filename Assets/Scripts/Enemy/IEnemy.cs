@@ -2,8 +2,9 @@
 
 public interface IEnemy
 {
-    event Action EnemyDied;
-    event Action EnemyDestroyed;
+    event EventHandler<MyEventArgs> EnemyKilled;
+    event EventHandler<MyEventArgs> EnemyHitTheRacket;
+    event EventHandler<MyEventArgs> EnemyEscaped;
     
     int Health { get; set; }
     int Speed { get; set; }

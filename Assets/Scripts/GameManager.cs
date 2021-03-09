@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Object = System.Object;
 
 public class GameManager : MonoBehaviour
 {
@@ -58,6 +60,11 @@ public class GameManager : MonoBehaviour
 
         Ball.ballDeath += ResetPosition;
         Block.onBrickDestroy += EndLevelContainer;
+    }
+
+    public void ChangeScore(Object sender, MyEventArgs args)
+    {
+        Score += args.scorePoints;
     }
 
     public void ResetPosition() // for racket
