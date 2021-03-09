@@ -66,6 +66,7 @@ public class Enemy : MonoBehaviour, IEnemy
     {
         if (destinationSwitcher.IsEnemyReachedMainDestinationPoint())
         {
+            OnEnemyEscaped();
             Destroy(gameObject);
         }
     }
@@ -102,6 +103,11 @@ public class Enemy : MonoBehaviour, IEnemy
     {
         MyEventArgs args = new MyEventArgs {scorePoints = points};
         EnemyHitTheRacket?.Invoke(this, args);
+    }
+
+    private void OnEnemyEscaped()
+    {
+        EnemyEscaped?.Invoke(this, null);
     }
 
     private void RecalculatePath()
