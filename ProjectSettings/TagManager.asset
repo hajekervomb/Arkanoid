@@ -13,6 +13,9 @@ TagManager:
   - Green Block
   - Pink Block
   - Enemy
+  - asteroid
+  - ship
+  - SpawnPoint
   layers:
   - Default
   - TransparentFX

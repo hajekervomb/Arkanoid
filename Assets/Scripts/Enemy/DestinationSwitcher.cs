@@ -98,6 +98,7 @@ public class DestinationSwitcher : MonoBehaviour
         return new Vector3(xCoord, yCoord, 0);
     }
 
+    // TODO - выяснить, почему иногда враги считают точкой назначения рандомную точку в состоянии Wandering
     public bool IsEnemyReachedMainDestinationPoint()
     {
         return destinationPoint == aiPath.destination;

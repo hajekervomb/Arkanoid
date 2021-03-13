@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
+using Zenject;
 using Random = UnityEngine.Random;
 
 public class EnemySpawner : MonoBehaviour
@@ -9,12 +10,14 @@ public class EnemySpawner : MonoBehaviour
    [SerializeField] private EnemyFactory enemyFactory;
    [SerializeField] public List<EnemyTypeSO> enemyTypesSOs = new List<EnemyTypeSO>();
 
-   [SerializeField] private List<GameObject> spawnPointGameObjects = new List<GameObject>();
+   private GameObject[] spawnPointGameObjects;
    private readonly List<Vector3> spawnPointPositions = new List<Vector3>();
 
-   [SerializeField] private float timeBeforeFirstSpawn = 5;
-   [SerializeField] private float enemySpawnDelay = 30;
-   [SerializeField] private int maxEnemyCount = 3;
+   private GameData gameData;
+
+   private float timeBeforeFirstSpawn;
+   private float enemySpawnDelay;
+   private int maxEnemyCount;
 
    private int currentEnemyCount = 0;
 
@@ -22,9 +25,24 @@ public class EnemySpawner : MonoBehaviour
 
    private void Start()
    {
-      enemyTypeEnumValues = Enum.GetValues(typeof(EnemyType));
+      Init();
       FillSpawnPointPositionList();
       InvokeRepeating(nameof(SpawnEnemyInRandomSpawnPosition), timeBeforeFirstSpawn, enemySpawnDelay);
+   }
+
+   [Inject]
+   private void Construct(GameData gameData)
+   {
+      this.gameData = gameData;
+   }
+
+   private void Init()
+   {
+      timeBeforeFirstSpawn = gameData.timeBeforeFirstSpawn;
+      enemySpawnDelay = gameData.enemySpawnDelay;
+      maxEnemyCount = gameData.maxEnemyCount;
+      
+      enemyTypeEnumValues = Enum.GetValues(typeof(EnemyType));
    }
 
    public void SpawnEnemy(EnemyType enemyType, Vector3 spawnLocation)
@@ -35,7 +53,7 @@ public class EnemySpawner : MonoBehaviour
       GameObject enemyGameObject = enemyFactory.GetEnemyInstance();
       enemyGameObject.transform.position = spawnLocation;
       enemyGameObject.transform.parent = this.gameObject.transform;
-      IEnemy enemy = enemyGameObject.AddComponent<Enemy>();
+      IEnemy enemy = enemyGameObject.GetComponent<IEnemy>();
 
       enemy.Init(enemyType);
       
@@ -82,6 +100,8 @@ public class EnemySpawner : MonoBehaviour
 
    private void FillSpawnPointPositionList()
    {
+      spawnPointGameObjects = GameObject.FindGameObjectsWithTag("SpawnPoint");
+      
       foreach (GameObject spawnPointGameObject in spawnPointGameObjects)
       {
          spawnPointPositions.Add(spawnPointGameObject.transform.position);

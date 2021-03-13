@@ -6,7 +6,7 @@ public class EnemyFactory : MonoBehaviour
 
     public GameObject GetEnemyInstance()
     {
-        GameObject prefab = Instantiate(enemyPrefab);
-        return prefab;
+        GameObject enemyInstance = Instantiate(enemyPrefab);
+        return enemyInstance;
     }
 }

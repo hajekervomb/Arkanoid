@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using UnityEngine.SocialPlatforms.Impl;
+using Zenject;
 
 public enum EnemyType
 {
@@ -25,6 +26,12 @@ public class Enemy : MonoBehaviour, IEnemy
     public event EventHandler<MyEventArgs> EnemyHitTheRacket;
     public event EventHandler<MyEventArgs> EnemyEscaped;
 
+    [Inject]
+    private void Construct(EnemySpawner enemySpawner)
+    {
+        this.enemySpawner = enemySpawner;
+    }
+    
     private void OnEnable()
     {
         BlocksManager.Instance.BlockDestroyed += RecalculatePath;
@@ -44,10 +51,9 @@ public class Enemy : MonoBehaviour, IEnemy
 
     public virtual void Init(EnemyType enemyType)
     {
-        enemySpawner = GetComponentInParent<EnemySpawner>();
         myAIPath = GetComponentInParent<MyAIPath>();
         myAIPath.TargetReachedEvent += CheckMainDestinationPoint;
-        destinationSwitcher = GetComponentInParent<DestinationSwitcher>();
+        destinationSwitcher = GetComponent<DestinationSwitcher>();
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
 
         EnemyTypeSO enemyTypeSO = enemySpawner.enemyTypesSOs.Find(type => type.name == enemyType.ToString());
