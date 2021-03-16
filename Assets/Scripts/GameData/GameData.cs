@@ -9,4 +9,8 @@ public class GameData : ScriptableObject
     public int maxEnemyCount;
     public float enemySpawnDelay;
     public float timeBeforeFirstSpawn;
+
+    public int scoreForKillingMultiplier;
+    [Range(1,100)]
+    public int scoreForKillingDivider;
 }

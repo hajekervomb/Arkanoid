@@ -1,27 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Zenject;
 using Random = UnityEngine.Random;
 
 public class EnemySpawner : MonoBehaviour
 {
+   private GameData gameData;
+   private Array enemyTypeEnumValues;
+
    [SerializeField] private EnemyFactory enemyFactory;
-   [SerializeField] public List<EnemyTypeSO> enemyTypesSOs = new List<EnemyTypeSO>();
+   [SerializeField] public List<EnemyTypeSO> enemyTypesScriptableObjects = new List<EnemyTypeSO>();
 
    private GameObject[] spawnPointGameObjects;
    private readonly List<Vector3> spawnPointPositions = new List<Vector3>();
-
-   private GameData gameData;
 
    private float timeBeforeFirstSpawn;
    private float enemySpawnDelay;
    private int maxEnemyCount;
 
-   private int currentEnemyCount = 0;
-
-   private Array enemyTypeEnumValues;
+   private int currentEnemyCount;
 
    private void Start()
    {
@@ -81,12 +80,6 @@ public class EnemySpawner : MonoBehaviour
       SpawnEnemy(GetRandomEnemyType(), spawnPosition);
    }
    
-   public void SpawnEnemyInRandomLocation()
-   {
-      Vector3 randomLocation = (Vector3)MyPathUtilities.GetValidRandomNode().position;
-      SpawnEnemy(GetRandomEnemyType(), randomLocation);
-   }
-
    private EnemyType GetRandomEnemyType()
    {
       EnemyType randomEnemy = (EnemyType)enemyTypeEnumValues.GetValue(Random.Range(0, enemyTypeEnumValues.Length));
@@ -105,6 +98,41 @@ public class EnemySpawner : MonoBehaviour
       foreach (GameObject spawnPointGameObject in spawnPointGameObjects)
       {
          spawnPointPositions.Add(spawnPointGameObject.transform.position);
+      }
+   }
+
+   private void DestroyAllEnemies()
+   {
+      int childrenCount = gameObject.transform.childCount;
+
+      for (int i = 0; i < childrenCount; i++)
+      {
+         Destroy(gameObject.transform.GetChild(i).gameObject); 
+      }
+
+      currentEnemyCount = 0;
+   }
+   
+   [CustomEditor(typeof(EnemySpawner))]
+   public class EnemySpawnerEditor : Editor
+   {
+      private EnemySpawner enemySpawner;
+      
+      public override void OnInspectorGUI()
+      {
+         enemySpawner = (EnemySpawner) target;
+         
+         DrawDefaultInspector();
+
+         if(GUILayout.Button("Spawn enemy"))
+         {
+            enemySpawner.SpawnEnemyInRandomSpawnPosition();
+         }
+         
+         if(GUILayout.Button("Destroy all enemies"))
+         {
+            enemySpawner.DestroyAllEnemies();
+         }
       }
    }
 }

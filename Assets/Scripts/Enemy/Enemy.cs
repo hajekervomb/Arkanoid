@@ -1,6 +1,5 @@
 ﻿using System;
 using UnityEngine;
-using UnityEngine.SocialPlatforms.Impl;
 using Zenject;
 
 public enum EnemyType
@@ -12,11 +11,13 @@ public enum EnemyType
 
 public class Enemy : MonoBehaviour, IEnemy
 {
+    private GameData gameData;
     private EnemySpawner enemySpawner;
+    
     private MyAIPath myAIPath;
     private DestinationSwitcher destinationSwitcher;
-
     private SpriteRenderer spriteRenderer;
+    
     public int Health { get; set; }
     public int Speed { get; set; }
     private int ScoreForKilling { get; set; }
@@ -27,8 +28,9 @@ public class Enemy : MonoBehaviour, IEnemy
     public event EventHandler<MyEventArgs> EnemyEscaped;
 
     [Inject]
-    private void Construct(EnemySpawner enemySpawner)
+    private void Construct( GameData gameData, EnemySpawner enemySpawner)
     {
+        this.gameData = gameData;
         this.enemySpawner = enemySpawner;
     }
     
@@ -40,32 +42,28 @@ public class Enemy : MonoBehaviour, IEnemy
         RecalculatePath();
     }
 
-    // TODO - убрать. Сейчас нужно только для тестов
-    private void Update()
+    private void Construct()
     {
-        if (Input.GetKeyDown(KeyCode.K))
-        {
-            Die();
-        }
+        myAIPath = GetComponent<MyAIPath>();
+        destinationSwitcher = GetComponent<DestinationSwitcher>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     public virtual void Init(EnemyType enemyType)
     {
-        myAIPath = GetComponentInParent<MyAIPath>();
+        Construct();
+        
         myAIPath.TargetReachedEvent += CheckMainDestinationPoint;
-        destinationSwitcher = GetComponent<DestinationSwitcher>();
-        spriteRenderer = GetComponentInChildren<SpriteRenderer>();
 
-        EnemyTypeSO enemyTypeSO = enemySpawner.enemyTypesSOs.Find(type => type.name == enemyType.ToString());
+        EnemyTypeSO enemyTypeSO = enemySpawner.enemyTypesScriptableObjects.Find(type => type.name == enemyType.ToString());
 
         Health = enemyTypeSO.health;
         Speed = enemyTypeSO.speed;
-        ScoreForKilling = 30 * Health * Speed / 100;
+        ScoreForKilling = gameData.scoreForKillingMultiplier * Health * Speed / gameData.scoreForKillingDivider;
 
         spriteRenderer.sprite = enemyTypeSO.sprite;
         myAIPath.maxSpeed = Speed;
     }
-
 
     // Проверка дошел ли враг именно до своего основного пункта назначения
     private void CheckMainDestinationPoint()

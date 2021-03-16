@@ -46,7 +46,7 @@ public class DestinationSwitcher : MonoBehaviour
                 var randomDestination = MyPathUtilities.GetValidRandomNode().position;
 
                 // Генерируем рандомную точку назначения до тех пор, пока не находим валидную (для текущего положения врага)
-                while (!IsPathPossible(EnemyNode, GetGraphNodeByPosition((Vector3) randomDestination)))
+                while (!PathUtilities.IsPathPossible(EnemyNode, GetGraphNodeByPosition((Vector3) randomDestination)))
                 {
                     randomDestination = MyPathUtilities.GetValidRandomNode().position;
                 }
@@ -54,11 +54,6 @@ public class DestinationSwitcher : MonoBehaviour
                 aiPath.destination = (Vector3) randomDestination;
                 break;
         }
-    }
-
-    private bool IsPathPossible(GraphNode node1, GraphNode node2)
-    {
-        return PathUtilities.IsPathPossible(node1, node2);
     }
 
     private void CheckPath()
@@ -70,7 +65,7 @@ public class DestinationSwitcher : MonoBehaviour
         }
         
         // Сначала проверям основной пункт назначения
-        if (IsPathPossible(EnemyNode, DestinationPointNode))
+        if (PathUtilities.IsPathPossible(EnemyNode, DestinationPointNode))
         {
             SetEnemyState(EnemyState.MovingToDestinationPoint);
         }

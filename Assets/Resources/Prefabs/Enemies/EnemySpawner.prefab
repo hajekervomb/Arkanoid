@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyFactory: {fileID: 529835036108215249}
-  enemyTypesSOs:
+  enemyTypesScriptableObjects:
   - {fileID: 11400000, guid: 21e1f1af411bcd44bb63a71d3bf2ae80, type: 2}
   - {fileID: 11400000, guid: c12b14541b141dd4f943bbcc092650f5, type: 2}
   - {fileID: 11400000, guid: b830d3ca896eedd488cf661b988621bd, type: 2}
